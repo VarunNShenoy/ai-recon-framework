@@ -1,5 +1,6 @@
-import subprocess
 import os
+from modules.subdomain_enum import run_subfinder
+from modules.live_host_detection import run_httprobe
 
 os.makedirs("results/subdomains",exist_ok=True)
 os.makedirs("results/live_hosts",exist_ok=True)
@@ -7,15 +8,9 @@ os.makedirs("results/live_hosts",exist_ok=True)
 domain = input("Enter domain:")
 print(f"Starting recon on {domain}")
 
-# Run Subfinder
-result = subprocess.run(["subfinder","-d", domain],
-capture_output=True,
-text=True
-)
+# Run Subfinder as a function from modules
 
-#Convert Output into a list
-subdomains = result.stdout.splitlines()
-print("\nSubdomains Found:\n")
+subdomains = run_subfinder(domain)
 
 
 #save the results to a file
@@ -24,16 +19,10 @@ with open(f"results/subdomains/{domain}.txt", "w") as file:
   for subdomain in subdomains:
     file.write(subdomain+"\n")
 
-#Run httpx on discovered subdomains
-
 print("\nChecking the live hosts")
+#  Run httprobe from resuls obtained from domains.txt and use httprobe is used as function
 
-with open(f"results/subdomains/{domain}.txt","r") as infile:
-   httprobe_result = subprocess.run(["/root/go/bin/httprobe"],stdin=infile,capture_output=True,text=True)
-
-#Convert the results into text
-
-live_hosts = httprobe_result.stdout.splitlines()
+live_hosts = run_httprobe(f"results/subdomains/{domain}.txt")
 
 # Save live host in a file
 
