@@ -28,14 +28,12 @@ with open(f"results/subdomains/{domain}.txt", "w") as file:
 
 print("\nChecking the live hosts")
 
-httpx_result = subprocess.run(["httpx","-l",f"results/subdomains/{domain}.txt"],
-capture_output=True,
-text=True
-)
+with open(f"results/subdomains/{domain}.txt","r") as infile:
+   httprobe_result = subprocess.run(["/root/go/bin/httprobe"],stdin=infile,capture_output=True,text=True)
 
 #Convert the results into text
 
-live_hosts = httpx_result.stdout.splitlines()
+live_hosts = httprobe_result.stdout.splitlines()
 
 # Save live host in a file
 
