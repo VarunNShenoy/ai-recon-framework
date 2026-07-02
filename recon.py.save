@@ -14,6 +14,7 @@ print(f"Starting recon on {domain}")
 
 subdomains = run_subfinder(domain)
 
+
 #save the results to a file
 
 with open(f"results/subdomains/{domain}.txt", "w") as file:
@@ -21,7 +22,6 @@ with open(f"results/subdomains/{domain}.txt", "w") as file:
     file.write(subdomain+"\n")
 
 print("\nChecking the live hosts")
-
 #  Run httprobe from resuls obtained from domains.txt and use httprobe is used as function
 
 live_hosts = run_httprobe(f"results/subdomains/{domain}.txt")
@@ -32,7 +32,7 @@ with open(f"results/live_hosts/{domain}_live.txt","w") as file:
   for host in live_hosts:
     file.write(host + "\n")
 
-print("\nChecking for technologies")
+
 # Run whatweb from results obtained from live_hosts.txt via function
 
 technologies = run_whatweb(f"results/live_hosts/{domain}_live.txt")
@@ -41,7 +41,7 @@ technologies = run_whatweb(f"results/live_hosts/{domain}_live.txt")
 
 with open(f"results/technologies/{domain}_tech.txt","w") as file:
   for technology in technologies:
-   file.write(technology+"\n")
+   file.write(technology+"/n")
 
 #print scan summary
 print("\nScan Summary")
